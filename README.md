@@ -36,3 +36,4 @@ Create an email input prompt/picker with the following things to remember:
 - Automatically create a tag from the current user input on blur
 - Optimize validating emails when displaying as email tags.
 - Show a small hint box below text input that says "No email match for &lt;user input&gt;" when typing an email that is not on the email list.
+- Add testing for the component itself for test coverage once placed into deployment pipeline.
