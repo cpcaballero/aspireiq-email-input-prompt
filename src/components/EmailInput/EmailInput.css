@@ -9,6 +9,7 @@
   flex: 1;
   flex-direction: row;
   flex-wrap: wrap;
+  position: relative;
   width: 400px;
   min-height: 50px;
   max-width: 400px;
@@ -40,14 +41,15 @@
   display: inline-flex;
   align-items: center;
   height: 18px;
-  padding: 5px 4px;
-  margin-top: 10px;
-  margin-bottom: 8px;
+  padding: 4px;
+  margin: 8px 8px 8px 0px;
+  border-radius: 6px;
   font-size: 14px;
   line-height: 18px;
   letter-spacing: -0.32px;
   font-weight: bold;
   font-style: normal;
+  
 }
 
 .emailTag:hover {
@@ -56,36 +58,37 @@
   mix-blend-mode: normal;
 }
 
-.emailTag:hover .close:after {
+.emailTag:hover .close::after {
   content: "\00A0x\00A0";
-  padding-left: 5px;
-  padding-right: 5px;
 }
-.emailTag:hover .alert:after {
+.emailTag:hover .alert::after {
   content: "\00A0x\00A0";
-  padding-left: 2px;
-  padding-right: 2px;
 }
 
-.emailTag.invalid,
-.emailTag.invalid:hover {
-  display: inline-flex;
-  align-items: center;
-  height: 18px;
-  padding: 5px 8px 5px 0px;
+.emailTag.invalid {
   background: #f3b7bd;
-  border-radius: 6px;
-  font-weight: bold;
-  font-style: normal;
-  font-size: 14px;
-  line-height: 18px;
-  letter-spacing: -0.32px;
 }
 
-.emailTag .close:after {
+.emailTag .close::after,
+.emailTag .alert::after {
+  display: block;
+  width: 16px;
+  height: 16px;
+  text-align: center;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.emailTag .close::after {
   content: "\00A0\00A0\00A0";
-  padding-left: 7px;
-  padding-right: 7px;
+}
+
+
+.alert::after {
+  content: "\00A0!\00A0";  
+  color: white;
+  background-color: #f1515f;
+  border-radius: 50%;
 }
 
 .emailTagText {
@@ -94,6 +97,7 @@
   color: #1a1818;
   letter-spacing: -0.32px;
 }
+
 
 .icon {
   box-sizing: border-box;
@@ -104,15 +108,6 @@
   padding-left: 8px;
 }
 
-.alert:after {
-  content: "\00A0!\00A0";
-  padding-left: 4px;
-  padding-right: 4px;
-  color: white;
-  background-color: #f1515f;
-  border-radius: 50%;
-}
-
 .inputContainer {
   flex: 1;
 }
@@ -120,8 +115,10 @@
 .emailInput {
   display: inline-flex;
   align-items: center;
-  box-sizing: border-box;
   width: 100%;
+  height: 18px;
+  padding: 4px;
+  margin: 8px 8px 8px 0px;
   min-width: 10px;
   max-width: 100%;
   color: #bdbdbd;
@@ -147,7 +144,7 @@
   box-shadow: 0px 4px 14px rgba(26, 24, 24, 0.08);
 }
 
-.dropdownWrapper:after {
+.dropdownWrapper::after {
   background-image: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0),
@@ -178,6 +175,9 @@
 }
 
 .loader {
+  position: absolute;
+  right: 0;
+  top: 10px;
   width: 20px;
   height: 20px;
 }

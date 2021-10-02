@@ -1,15 +1,15 @@
 import { 
   useState, 
-  useEffect, 
-  useRef, 
+  useEffect,
+  useCallback,
   KeyboardEvent, 
   ChangeEvent 
 } from "react";
-import { Dropdown } from "./Dropdown";
-import { EmailTag } from "./EmailTag";
-
 import * as Emailvalidator from "email-validator";
 import { debounce } from "throttle-debounce";
+
+import { Dropdown } from "./Dropdown";
+import { EmailTag } from "./EmailTag";
 
 import { emails } from "../../emails";
 import loadgif from "../../assets/loading.gif";
@@ -23,24 +23,26 @@ export const EmailInput = () => {
   const [emailList, setEmailList] = useState<string[]>([]);
   const [selectedDropdownValue, setSelectedDropdownValue] = useState<number>(-1);
   const [loading, setLoading] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+
+  const debounceFunc = useCallback( 
+    debounce(DEBOUNCE_TIME, (userInput: string) => {
+      const filteredEmails = emails.filter(
+        (email) => 
+          email.startsWith(userInput) && 
+          !emailTags.includes(email)
+      );
+      setEmailList(filteredEmails);
+      setLoading(false);
+    }),
+    [emailTags]
+  );
 
   useEffect(() => {
     if (userInput !== "") {
       setLoading(true);
-      const debounceFunc = debounce(DEBOUNCE_TIME, () => {
-        const filteredEmails = emails.filter(
-          (email) => 
-            email.startsWith(userInput) && 
-            !emailTags.includes(email)
-        );
-        setEmailList(filteredEmails);
-        setLoading(false);
-      });
-      debounceFunc();
+      debounceFunc(userInput);
     }
-    inputRef.current?.focus();
-  }, [userInput, emailTags]);
+  }, [userInput]);
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setUserInput(e.target.value);
@@ -105,7 +107,7 @@ export const EmailInput = () => {
                   >
                     <EmailTag
                       key={email}
-                      icon={
+                      iconClassName={
                         Emailvalidator.validate(email) 
                           ? "icon close" 
                           : "icon alert"
@@ -119,22 +121,16 @@ export const EmailInput = () => {
             }
             <li className="inputContainer">
               <input
-                ref={inputRef}
                 className="emailInput"
                 value={userInput}
                 placeholder={emailTags.length > 0 ? "" : "Enter recipients..."}
                 onChange={handleChangeInput}
                 onKeyDown={handleKeyDown}
-                
               />
             </li>
           </ul>
+          {loading && <img src={loadgif} className="loader" alt="loading gif" />}
         </div>
-        {
-          loading 
-            ? <img src={loadgif} className="loader" alt="loading gif" /> 
-            : ""
-        }
       </div>
       {
         userInput !== "" && 

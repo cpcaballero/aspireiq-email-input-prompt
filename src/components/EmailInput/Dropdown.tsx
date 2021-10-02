@@ -1,4 +1,4 @@
-import { 
+import React, { 
   useEffect, 
   useRef 
 } from "react";
@@ -9,7 +9,7 @@ interface DropdownProps {
   onInsertEmailTag: (email: string) => void;
 }
 
-export const Dropdown = (props: DropdownProps) => {
+export const Dropdown: React.FC<DropdownProps> = (props) => {
   const { 
     selectedDropdownValue, 
     emailList, 
@@ -18,11 +18,15 @@ export const Dropdown = (props: DropdownProps) => {
   const dropdownRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    if (selectedDropdownValue !== null) {
-      dropdownRef.
-        current?.
-        children[selectedDropdownValue]?.
-        scrollIntoView?.();
+    if (
+      selectedDropdownValue >= 0 && 
+      dropdownRef.current && 
+      dropdownRef.current.children[selectedDropdownValue]
+    ) {
+      dropdownRef
+        .current
+        .children[selectedDropdownValue]
+        .scrollIntoView();
     }
   }, [selectedDropdownValue]);
 
